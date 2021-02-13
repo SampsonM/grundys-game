@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-@app.route('/get-best-move', methods=['GET'])
+@app.route('/get-best-move', methods=['POST'])
 def collection():
-	if request.method == 'GET':
-		data = request.form
+	if request.method == 'POST':
+		data = request.get_json()
 		foo = data['test'] if data else 'you provided no value here'
 
 		return jsonify(foo)

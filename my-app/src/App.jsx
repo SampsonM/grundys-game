@@ -1,37 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
-  // Create the count state.
-  const [count, setCount] = useState(0);
-  // Create the counter (+1 every second).
-  useEffect(() => {
-    const timer = setTimeout(() => setCount(count + 1), 1000);
-    return () => clearTimeout(timer);
-  }, [count, setCount]);
-  // Return the App component.
+  const [moveToTake, setMoveToTake] = useState('');
+  const [positions, setPositions] = useState([]);
+
+  async function handleClick() {
+    if (positions.length > 0) {
+      try {
+        const requestData = {
+          method: 'post',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ test: positions })
+        };
+  
+        const response = await fetch(
+          'http://localhost:5000/get-best-move',
+          requestData
+        );
+        const data = await response.json();
+  
+        setMoveToTake(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.jsx</code> and save to reload.
-        </p>
-        <p>
-          Page has been open for <code>{count}</code> seconds.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </p>
-      </header>
+      <h1>Grundy's game - next move picker</h1>
+      <p>Hello there mate, lets figure out your best move!</p>
+
+      <p>This assumes it is now your turn, and, we are trying to help you win the game.</p>
+      <div className="input-container">
+        <label htmlFor="positions">Enter current coin positions: </label>
+        <input
+          name="positions"
+          type="text"
+          onChange={(e) => setPositions(e.target.value)}
+          placeholder="e.g. 3,1,1,2"
+        ></input>
+      </div>
+      <button onClick={handleClick}>Get your best move</button>
+      { moveToTake.length > 0 && (<p>your best move is: {moveToTake}</p>)}
     </div>
   );
 }
