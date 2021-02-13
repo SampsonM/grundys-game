@@ -14,7 +14,7 @@ function App() {
             Accept: 'application/json',
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ test: positions })
+          body: JSON.stringify({ positions })
         };
   
         const response = await fetch(

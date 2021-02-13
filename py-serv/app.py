@@ -4,13 +4,25 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+# returns best position
+# positions - a string of positions in game
+# player - the player who's turn it is to move
+def get_best_possible_position(positions, player):
+	# if no positions can be split player past is loser
+	# if positions can be split, split one and recurse
+
 @app.route('/get-best-move', methods=['POST'])
 def collection():
 	if request.method == 'POST':
 		data = request.get_json()
-		foo = data['test'] if data else 'you provided no value here'
 
-		return jsonify(foo)
+		if data and data['positions']:
+			pos = get_best_possible_position(data['positions'], 1)
+			return jsonify(pos)
+		else:
+			return jsonify('No inputs found')
+
+
 
 if __name__ == '__main__':
 	app.debug = True
