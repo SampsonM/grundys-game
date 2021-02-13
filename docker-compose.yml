@@ -1,0 +1,32 @@
+version: "3.3"
+
+# service name
+#   image/build:      Location or name or image to build
+#   container_name:   Used to reference within containers/depends_on instructions
+#   ports:            The port to expose XXXX:YYYY === external_PORT:internal_PORT
+#   volumes:          Allows hot module reload of apps
+#   working_dir:      Sets the directory in which to run any command/CMD for image
+
+# Containers to be run
+services:
+  # Python server which lives under py-serv folder
+  server:
+    build: "./py-serv"
+    container_name: py-serv
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/py-serv:cached
+    working_dir: /py-serv/py-serv
+
+  # React app which lives under my=app folder
+  web:
+    build: "./my-app"
+    container_name: my-app
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./my-app/public:/my-app/public:cached
+      - ./my-app/src:/my-app/src:cached
+      - ./my-app/types:/my-app/types:cached
+    working_dir: /my-app/my-app

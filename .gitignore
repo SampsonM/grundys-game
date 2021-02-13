@@ -1,2 +1,5 @@
 /my-app/node_modules
 /my-app/package-lock.json
+
+/py-serv/env
+/py-serv/*.db
