@@ -32,7 +32,7 @@ def get_best_possible_position(positions, current_player, orig_player):
 				new_positions = positions.replace(current_pos,  bar)
 				result = get_best_possible_position(new_positions, next_player, orig_player)
 
-				if result[0] == orig_player:
+				if result[0] != orig_player:
 					break
 
 	# no split happened
